@@ -169,6 +169,25 @@ def stop_job(job_id):
     return jsonify({"ok": True})
 
 
+@app.route("/api/job/<int:job_id>/rerun", methods=["POST"])
+def rerun_job(job_id):
+    db = get_db()
+    row = db.execute("SELECT * FROM jobs WHERE id=?", (job_id,)).fetchone()
+    if not row:
+        db.close()
+        return jsonify({"error": "job not found"}), 404
+    result = rc("sync/copy", {"srcFs": row["src"], "dstFs": row["dst"], "_async": "true"})
+    jobid = result.get("jobid")
+    cur = db.execute(
+        "INSERT INTO jobs (src, dst, rclone_jobid, status) VALUES (?,?,?,?)",
+        (row["src"], row["dst"], jobid, "running"),
+    )
+    db.commit()
+    new_id = cur.lastrowid
+    db.close()
+    return jsonify({"id": new_id, "src": row["src"], "dst": row["dst"], "rclone_jobid": jobid})
+
+
 if __name__ == "__main__":
     init_db()
     app.run(host="0.0.0.0", port=8080)

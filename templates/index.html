@@ -611,6 +611,8 @@ async function loadStatus() {
       let actionCell = '';
       if (job.status === 'running') {
         actionCell = '<button class="btn-sm" onclick="stopJob(' + job.id + ')">Stop</button>';
+      } else {
+        actionCell = '<button class="btn-sm" onclick="rerunJob(' + job.id + ')">Re-run</button>';
       }
       let errTitle = job.error ? ' title="' + job.error.replace(/"/g, '&quot;') + '"' : '';
       tr.innerHTML = '<td class="src" title="' + job.src + '">' + job.src + '</td>'
@@ -630,6 +632,21 @@ async function stopJob(id) {
   await fetch('/api/job/' + id + '/stop', { method: 'POST' });
   showToast('Job stopped', 'success');
   loadStatus();
+}
+
+async function rerunJob(id) {
+  try {
+    const resp = await fetch('/api/job/' + id + '/rerun', { method: 'POST' });
+    const data = await resp.json();
+    if (data.error) {
+      showToast(data.error, 'error');
+    } else {
+      showToast('Re-run started: ' + data.src, 'success');
+      loadStatus();
+    }
+  } catch (e) {
+    showToast('Failed to re-run job', 'error');
+  }
 }
 
 // === Toast ===
