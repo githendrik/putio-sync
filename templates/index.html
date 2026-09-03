@@ -6,16 +6,17 @@
 <title>putio-sync</title>
 <style>
   :root {
-    --bg: #fafafa;
-    --surface: #fff;
-    --border: #000;
-    --text: #000;
-    --dim: #999;
-    --accent: #000;
-    --green: #0066cc;
-    --orange: #cc6600;
-    --red: #cc0000;
-    --hover: #f0f0f0;
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --border: #00ff9f;
+    --text: #e0e0e0;
+    --dim: #4a4a6a;
+    --accent: #ff00ff;
+    --green: #00ff9f;
+    --orange: #ffaa00;
+    --red: #ff0055;
+    --hover: #1a1a2e;
+    --blue: #00d4ff;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -38,6 +39,8 @@
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: -0.02em;
+    color: var(--green);
+    text-shadow: 0 0 10px rgba(0,255,159,0.5);
   }
   header .subtitle {
     color: var(--dim);
@@ -110,7 +113,7 @@
     width: 1.1rem;
     height: 1.1rem;
     cursor: pointer;
-    accent-color: var(--text);
+    accent-color: var(--accent);
   }
   .tree-label { cursor: pointer; user-select: none; }
   .tree-loading { color: var(--dim); padding: 0.3rem 0 0.3rem 2rem; }
@@ -140,7 +143,7 @@
     flex-shrink: 0;
     padding: 0 0.3rem;
   }
-  .sel-list .remove:hover { background: var(--red); color: var(--surface); }
+  .sel-list .remove:hover { background: var(--red); color: var(--bg); }
   .empty { color: var(--dim); text-align: center; padding: 1.5rem 0; font-style: italic; }
 
   /* Destination browser */
@@ -206,14 +209,14 @@
   }
   .preview-arrow { color: var(--dim); flex-shrink: 0; font-weight: 900; }
   .preview-src { color: var(--dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .preview-dst { color: var(--green); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; }
+  .preview-dst { color: var(--green); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; text-shadow: 0 0 6px rgba(0,255,159,0.3); }
   .preview-empty { color: var(--dim); }
 
   /* Buttons */
   .btn {
-    background: var(--text);
-    color: var(--surface);
-    border: 3px solid var(--border);
+    background: var(--accent);
+    color: var(--bg);
+    border: 3px solid var(--accent);
     padding: 0.8rem 1rem;
     cursor: pointer;
     font-size: 0.9rem;
@@ -223,8 +226,13 @@
     width: 100%;
     margin-top: 1rem;
     font-family: inherit;
+    box-shadow: 0 0 15px rgba(255,0,255,0.3);
   }
-  .btn:hover:not(:disabled) { background: var(--surface); color: var(--text); }
+  .btn:hover:not(:disabled) {
+    background: var(--bg);
+    color: var(--accent);
+    box-shadow: 0 0 20px rgba(255,0,255,0.5);
+  }
   .btn:disabled { opacity: 0.2; cursor: not-allowed; }
   .btn-sm {
     width: auto;
@@ -236,11 +244,11 @@
     margin: 0;
     background: var(--surface);
     border: 2px solid var(--border);
-    color: var(--text);
+    color: var(--green);
     font-family: inherit;
     cursor: pointer;
   }
-  .btn-sm:hover { background: var(--text); color: var(--surface); }
+  .btn-sm:hover { background: var(--green); color: var(--bg); box-shadow: 0 0 10px rgba(0,255,159,0.4); }
 
   /* Status table */
   .status-panel { grid-column: 1 / -1; overflow-x: auto; }
@@ -271,11 +279,11 @@
     letter-spacing: 0.1em;
     border: 2px solid var(--border);
   }
-  .b-running { background: var(--orange); color: var(--surface); }
-  .b-completed { background: var(--surface); color: var(--text); }
-  .b-error { background: var(--red); color: var(--surface); }
-  .b-stopped { background: var(--dim); color: var(--surface); }
-  .b-pending { background: var(--bg); color: var(--text); }
+  .b-running { background: var(--orange); color: var(--bg); box-shadow: 0 0 8px rgba(255,170,0,0.4); }
+  .b-completed { background: var(--surface); color: var(--green); border-color: var(--green); }
+  .b-error { background: var(--red); color: var(--bg); box-shadow: 0 0 8px rgba(255,0,85,0.4); }
+  .b-stopped { background: var(--dim); color: var(--bg); }
+  .b-pending { background: var(--hover); color: var(--text); }
 
   .progress-wrap { display: flex; align-items: center; gap: 0.5rem; }
   .progress-bar {
@@ -284,14 +292,14 @@
     background: var(--bg);
     border: 2px solid var(--border);
   }
-  .progress-fill { height: 100%; background: var(--text); }
+  .progress-fill { height: 100%; background: var(--green); box-shadow: 0 0 6px rgba(0,255,159,0.5); }
   .progress-text { font-size: 0.75rem; font-weight: 900; }
   .spinner {
     display: inline-block;
     width: 0.8rem;
     height: 0.8rem;
-    border: 2px solid var(--border);
-    border-top-color: var(--text);
+    border: 2px solid var(--hover);
+    border-top-color: var(--green);
     animation: spin 0.6s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -303,8 +311,8 @@
     left: 0;
     right: 0;
     padding: 1rem 2rem;
-    background: var(--text);
-    color: var(--surface);
+    background: var(--surface);
+    color: var(--green);
     font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -312,11 +320,12 @@
     z-index: 100;
     transform: translateY(100%);
     transition: transform 0.2s;
-    border-top: 3px solid var(--border);
+    border-top: 3px solid var(--green);
+    box-shadow: 0 -4px 20px rgba(0,255,159,0.2);
   }
   .toast.show { transform: translateY(0); }
-  .toast.success { background: var(--green); }
-  .toast.error { background: var(--red); }
+  .toast.success { color: var(--green); border-color: var(--green); box-shadow: 0 -4px 20px rgba(0,255,159,0.2); }
+  .toast.error { color: var(--red); border-color: var(--red); box-shadow: 0 -4px 20px rgba(255,0,85,0.2); }
 </style>
 </head>
 <body>
