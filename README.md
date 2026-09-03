@@ -2,6 +2,8 @@
 
 Thin web UI for selectively syncing local folders to [put.io](https://put.io) via [rclone](https://rclone.org)'s remote control (rc) API.
 
+![putio-sync demo](demo.png)
+
 ## What it does
 
 - Browse local filesystem remotes (e.g. bind-mounted disks) with a folder tree
